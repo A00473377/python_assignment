@@ -25,11 +25,8 @@ def get_all_coin_ids(csv_path="CoinsData.csv"):
         response = requests.get(api_url)
         coins_list = response.json()
         coins_df = pd.DataFrame(coins_list)
-        non_digit_rows_filter = coins_df.apply(lambda row: any(char.isdigit() for char in str(row))).any(axis=1)
-        clean_coins_df = coins_df[~non_digit_rows_filter]
-        clean_coins_df.to_csv(csv_path, index=False)
-        return clean_coins_df
-
+        coins_df.to_csv(csv_path, index=False)
+        return coins_df
 
 
 #Retreiving historical price data
@@ -80,8 +77,6 @@ def load_or_train_model():
 
             model = models.Sequential([
                 layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
-                layers.MaxPooling2D((2, 2)),
-                layers.Conv2D(64, (3, 3), activation='relu'),
                 layers.MaxPooling2D((2, 2)),
                 layers.Conv2D(64, (3, 3), activation='relu'),
                 layers.MaxPooling2D((2, 2)),
